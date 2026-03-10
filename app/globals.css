@@ -10,12 +10,22 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-theme1: var(--theme1);
+  --color-theme1Shade: var(--theme1Shade);
+  --color-theme1Bright: var(--theme1Bright);
+  --color-theme1L: var(--theme1L);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: oklch(97.622% 0.00425 15.794); 
+    --foreground: #000000;
+    --theme1: oklch(0.55 0.13 186);
+    --theme1Shade: oklch(0.6002 0.1038 184.7); 
+    --theme1L: oklch(90.798% 0.12794 187.842 / 0.459); 
+    --theme1Bright: oklch(99.032% 0.00952 197.656 / 0.929); 
+
+
   }
 }
 
