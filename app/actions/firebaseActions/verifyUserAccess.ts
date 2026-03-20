@@ -18,7 +18,7 @@ export async function verifyUserAccess(email: string, reportId: string) {
         const adminDb = getAdminDb()
         
         const snapshot = await adminDb
-        .collection('submissions')
+        .collection('estimates')
         .where('contact.email', '==', normalizedEmail)
         .where('reportId', '==', normalizedReportId)
         .limit(1)

@@ -1,0 +1,71 @@
+import {
+  EstimateData, ContactInfo,
+  PropertyType, PropertySize, AreaSizeCategory, SeverityLevel, MoldCause,
+  YesNoUnsure, StartTime, Accessibility, HealthSymptoms, FoggingInterest, HiringTimeline,
+} from '@/types';
+
+export const TOTAL_QUESTION_STEPS = 19;
+
+export const COUNTRIES = [
+  "United States","Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda",
+  "Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh",
+  "Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina",
+  "Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cabo Verde","Cambodia",
+  "Cameroon","Canada","Central African Republic","Chad","Chile","China","Colombia","Comoros",
+  "Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti",
+  "Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea",
+  "Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia",
+  "Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti",
+  "Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy",
+  "Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Korea, North","Korea, South",
+  "Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya",
+  "Liechtenstein","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali",
+  "Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco",
+  "Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal",
+  "Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Macedonia","Norway","Oman",
+  "Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines",
+  "Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia",
+  "Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia",
+  "Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia",
+  "Solomon Islands","Somalia","South Africa","South Sudan","Spain","Sri Lanka","Sudan",
+  "Suriname","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand",
+  "Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu",
+  "Uganda","Ukraine","United Arab Emirates","United Kingdom","Uruguay","Uzbekistan","Vanuatu",
+  "Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe",
+];
+
+export const DEFAULT_ESTIMATE_DATA: EstimateData = {
+  propertyType:      undefined as unknown as PropertyType,
+  propertySize:      undefined as unknown as PropertySize,
+  zipCode:           '',
+  affectedLocations: [],
+  areaSizeCategory:  undefined as unknown as AreaSizeCategory,
+  severity:          undefined as unknown as SeverityLevel,
+  cause:             undefined as unknown as MoldCause,
+  moistureFixed:     undefined as unknown as YesNoUnsure,
+  startTime:         undefined as unknown as StartTime,
+  accessibility:     undefined as unknown as Accessibility,
+  hvacAffected:      undefined as unknown as YesNoUnsure,
+  furnitureAffected: undefined as unknown as YesNoUnsure,
+  healthSymptoms:    undefined as unknown as HealthSymptoms,
+  needsTesting:      undefined as unknown as YesNoUnsure,
+  foggingInterest:   undefined as unknown as FoggingInterest,
+  planInsuranceClaim:undefined as unknown as YesNoUnsure,
+  hasInsurance:      undefined as unknown as YesNoUnsure,
+  hiringTimeline:    undefined as unknown as HiringTimeline,
+  previousEstimates: [
+    { companyName: '', cityName: '', priceEstimate: '' },
+    { companyName: '', cityName: '', priceEstimate: '' },
+    { companyName: '', cityName: '', priceEstimate: '' },
+  ],
+};
+
+export const DEFAULT_CONTACT_INFO: ContactInfo = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: undefined,
+  preferredContact: undefined,
+  zipCode: '',
+  country: 'United States',
+};

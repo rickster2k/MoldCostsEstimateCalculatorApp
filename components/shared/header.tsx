@@ -5,25 +5,58 @@ import Link from "next/link"
 import { signOut, useSession } from 'next-auth/react'
 
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 export type HeaderProps = {
     brandName?:string;
 }
 export default function Header({brandName = 'MoldCosts'}:HeaderProps){
     const { data: session } = useSession()
     const isAdmin = session?.user?.admin === true
-    const isUser  = true
     const router = useRouter()
+
+    
+    // Track if user has audit data in sessionStorage
+    const [hasEstimateData, setHasEstimateData] = useState(false)
+
+    useEffect(() => {
+      // Check if user has active audit session
+      const checkEstimateSession = () => {
+        const estimateData = sessionStorage.getItem('estimate')
+        setHasEstimateData(!!estimateData)
+      }
+
+      checkEstimateSession()
+
+      // Listen for storage changes (when user logs in/out)
+      window.addEventListener('storage', checkEstimateSession)
+      
+      // Custom event for same-tab updates
+      window.addEventListener('estimate-session-change', checkEstimateSession)
+
+      return () => {
+        window.removeEventListener('storage', checkEstimateSession)
+        window.removeEventListener('estimate-session-change', checkEstimateSession)
+      }
+    }, [])
 
     const handleSignOut = () => {
         if(isAdmin){
             signOut({ callbackUrl: '/'})
-        } else if(isUser){
-            alert("handle if user signs out")
+        } else if(hasEstimateData){
+            // Clear audit session
+            sessionStorage.removeItem('estimate')
+            setHasEstimateData(false) 
+             // Dispatch custom event for other components
+            window.dispatchEvent(new Event('estimate-session-change'))
+            // Redirect to home
+            router.push('/')
         }
         else{
+            alert("Should never hit here")
             router.push('/')
         }
     }
+
     return (
         <header className="bg-white border-b border-slate-100 py-3 px-4 sticky top-0 z-50 shadow-sm">
             <div className="grid grid-cols-3 items-center w-full px-10">
@@ -63,10 +96,10 @@ export default function Header({brandName = 'MoldCosts'}:HeaderProps){
             <div className="flex items-center justify-end gap-6 order-3">
             {!isAdmin && (
                 <button
-                onClick={() => (session ) ? handleSignOut() : router.replace('/user/login')} // add check for user with or next to session
+                onClick={() => (session || hasEstimateData ) ? handleSignOut() : router.replace('/user/login')} // add check for user with or next to session
                 className="text-sm font-bold text-slate-400 hover:text-[#1e3a5f]"
                 >
-                {session  ? 'Sign Out' : 'Sign In'} 
+                {(session || hasEstimateData)  ? 'Sign Out' : 'Sign In'} 
                 </button>
             )}
             </div>

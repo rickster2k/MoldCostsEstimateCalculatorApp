@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import SignInViewSection from './signInViewSection';
 import RecoverySection from './recoverySection';
 import BackButtonDefault from '../shared/backButton';
-import { verifyUserAccess } from '@/app/actions/verifyUserAccess';
+import { verifyUserAccess } from '@/app/actions/firebaseActions/verifyUserAccess';
 import RecoverySentSection from './recoverySentSection';
 
 type View = 'signin' | 'recovery' | 'recovery-sent';

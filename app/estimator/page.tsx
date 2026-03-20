@@ -1,6 +1,8 @@
-export default function estimatorPage(){
-    return(
+import EstimatorClient from "@/components/estimate/estimateClient";
 
-        <div className="flex flex-col">estimator questions here</div>
+export default function estimatorPage(){
+
+    return(
+        <EstimatorClient />
     )
 }

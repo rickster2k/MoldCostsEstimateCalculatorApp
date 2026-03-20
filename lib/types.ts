@@ -117,15 +117,6 @@ export interface CalculationResult {
   breakdown: EstimateBreakdown;
 }
 
-/**
- * An uploaded PDF file stored as a base64 data URL.
- * Used by admins to attach the DIY Blueprint or Consultation PDF
- * to a specific submission.
- */
-export interface AttachedPdf {
-  name: string; // original filename, e.g. "diy-blueprint-v2.pdf"
-  data: string; // base64 data URL — "data:application/pdf;base64,..."
-}
 
 // ─── Core data interfaces ──────────────────────────────────────────────────────
 
@@ -209,6 +200,7 @@ export interface Estimate {
 
     /*Results of Estimate Calculator*/
     estimateAmount: number; // Computed average estimate in USD at time of submission 
+    estimateResults: CalculationResult; // Results from gemini
     data: EstimateData; // Complete snapshot of all 19 question answers at time of submission 
     testingStatus: YesNoUnsure;
 
@@ -221,7 +213,7 @@ export interface Estimate {
     contact: ContactInfo;
 
     /* Contractor match tracking */
-    contractorMatchStatus: ContractorMatchStatus; // only relevant when requestRealEstimates is true
+    contractorMatchStatus?: ContractorMatchStatus; // only relevant when requestRealEstimates is true
     contractorMatchUpdatedAt?: string;            // ISO date string of last status change
 
 
@@ -230,8 +222,8 @@ export interface Estimate {
     consultationPdf?: AttachedPdf;// PDF uploaded by admin to fulfil a consultation request
 
     /* Admin fulfillment tracking */
-    blueprintDelivered: boolean;      // PDF was uploaded AND sent/delivered to the user
-    consultationDelivered: boolean;   // PDF was uploaded AND sent/delivered to the user
+    blueprintDelivered?: boolean;      // PDF was uploaded AND sent/delivered to the user
+    consultationDelivered?: boolean;   // PDF was uploaded AND sent/delivered to the user
 }
 
 export interface GlobalStats {
@@ -261,4 +253,37 @@ export interface GlobalStats {
   handledContractorMatch: number;        // contractorMatchStatus === 'completed'
   handledBlueprint: number;              // blueprintDelivered === true
   handledConsultation: number;           // consultationDelivered === true
+}
+
+
+
+
+
+export interface EstimateNoId {
+    /*Results of Estimate Calculator*/
+    estimateAmount: number; // Computed average estimate in USD at time of submission 
+    estimateResults: CalculationResult; // Results from gemini
+    data: EstimateData; // Complete snapshot of all 19 question answers at time of submission 
+    testingStatus: YesNoUnsure;
+
+    //  Service requests 
+    requestRealEstimates: boolean;// User opted in to being matched with local contractors
+    requestDiyBlueprint: boolean;// User requested the DIY Remediation Blueprint 
+    requestConsultant: boolean;// User requested a 1-on-1 expert consultation 
+
+    /*User Info */
+    contact: ContactInfo;
+
+    /* Contractor match tracking */
+    contractorMatchStatus?: ContractorMatchStatus; // only relevant when requestRealEstimates is true
+    contractorMatchUpdatedAt?: string;            // ISO date string of last status change
+
+
+    /* Admin-uploaded PDFs */
+    blueprintPdf?:AttachedPdf;// PDF uploaded by admin to fulfill a blueprint request
+    consultationPdf?: AttachedPdf;// PDF uploaded by admin to fulfil a consultation request
+
+    /* Admin fulfillment tracking */
+    blueprintDelivered?: boolean;      // PDF was uploaded AND sent/delivered to the user
+    consultationDelivered?: boolean;   // PDF was uploaded AND sent/delivered to the user
 }
