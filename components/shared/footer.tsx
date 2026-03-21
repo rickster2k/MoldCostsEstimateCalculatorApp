@@ -14,7 +14,6 @@ export default function Footer() {
         <button
             onClick={() => router.push('/admin/login')}
             className="absolute top-0 left-0 w-12 h-12 opacity-0 cursor-default"
-            aria-hidden
         />
 
         <div className="max-w-7xl mx-auto flex flex-col items-center gap-6">

@@ -1,0 +1,70 @@
+# ============================================================================
+# IAQ AUDIT - CLOUD BUILD CONFIGURATION
+# Orchestrates Docker build and Cloud Run deployment
+# ============================================================================
+
+steps:
+  # ---------------------------------------------------------------------------
+  # Step 1: Build Docker image with NEXT_PUBLIC vars baked in
+  # ---------------------------------------------------------------------------
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/moldcosts:$SHORT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/moldcosts:latest'
+      # Pass NEXT_PUBLIC vars as build args
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_API_KEY=$_NEXT_PUBLIC_FIREBASE_API_KEY'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$_NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_PROJECT_ID=$_NEXT_PUBLIC_FIREBASE_PROJECT_ID'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=$_NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=$_NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_APP_ID=$_NEXT_PUBLIC_FIREBASE_APP_ID'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=$_NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_APP_URL=$_NEXT_PUBLIC_APP_URL'
+      - '.'
+
+  # ---------------------------------------------------------------------------
+  # Step 2: Push image to Container Registry
+  # ---------------------------------------------------------------------------
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - 'gcr.io/$PROJECT_ID/moldcosts'
+
+  # ---------------------------------------------------------------------------
+  # Step 3: Deploy to Cloud Run
+  # ---------------------------------------------------------------------------
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'moldcosts'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/moldcosts:$SHORT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+
+images:
+  - 'gcr.io/$PROJECT_ID/moldcosts:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/moldcosts:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
+
+timeout: 1200s

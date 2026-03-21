@@ -1,8 +1,5 @@
-import {
-  EstimateData, ContactInfo,
-  PropertyType, PropertySize, AreaSizeCategory, SeverityLevel, MoldCause,
-  YesNoUnsure, StartTime, Accessibility, HealthSymptoms, FoggingInterest, HiringTimeline,
-} from '@/types';
+import { Accessibility, AreaSizeCategory, ContactInfo, EstimateData, FoggingInterest, HealthSymptoms, HiringTimeline, MoldCause, PropertySize, PropertyType, SeverityLevel, StartTime, YesNoUnsure } from "./types";
+
 
 export const TOTAL_QUESTION_STEPS = 19;
 
