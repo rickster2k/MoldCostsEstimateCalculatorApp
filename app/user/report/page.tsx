@@ -1,7 +1,13 @@
 import ReportClient from "@/components/user/reportClient";
+import { verifyUserIsValid } from "@/lib/auth/verifyUserIsValid";
 
-export default function ReportPage(){
+export default async function ReportPage(){
+    await verifyUserIsValid()    //check if user is verified
+
     return (
-        <ReportClient />
+        <div className="p-6 w-full">
+            <ReportClient />
+        </div>
+        
     )
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import { ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -17,6 +18,10 @@ export default function Footer() {
         />
 
         <div className="max-w-7xl mx-auto flex flex-col items-center gap-6">
+            <div className="flex items-center justify-center gap-2 opacity-50">
+                <ShieldCheck className="w-6 h-6" />
+                <span className="font-black text-lg">MoldCosts</span>
+            </div>
             <p className="text-slate-300 font-medium">&copy; 2026 <Link href={networkUrl} className="hover:text-teal-400 transition-colors cursor-pointer">IAQ Network</Link>. All rights reserved.</p>
 
             <div className="flex flex-wrap justify-center gap-6 text-xs">

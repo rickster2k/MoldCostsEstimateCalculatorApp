@@ -1,7 +1,7 @@
 'use server'
 
 import { Estimate, EstimateNoId } from "@/lib/types"
-import { generateEstimateId } from "../helperActions/generateEstimateId"
+import { generateEstimateId } from "../../helperActions/generateEstimateId"
 import { getAdminDb } from "@/lib/services/firebaseAdmin";
 
 export async function saveEstimateAction(data: EstimateNoId) {

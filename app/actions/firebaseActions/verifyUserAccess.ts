@@ -20,7 +20,7 @@ export async function verifyUserAccess(email: string, reportId: string) {
         const snapshot = await adminDb
         .collection('estimates')
         .where('contact.email', '==', normalizedEmail)
-        .where('reportId', '==', normalizedReportId)
+        .where('estimateId', '==', normalizedReportId)
         .limit(1)
         .get()
 
@@ -43,7 +43,7 @@ export async function verifyUserAccess(email: string, reportId: string) {
         .sign(secret)
 
         const cookieStore = await cookies()
-        cookieStore.set('user-audit-token', token, {
+        cookieStore.set('user-estimate-token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',

@@ -205,9 +205,9 @@ export interface Estimate {
     testingStatus: YesNoUnsure;
 
     //  Service requests 
-    requestRealEstimates: boolean;// User opted in to being matched with local contractors
-    requestDiyBlueprint: boolean;// User requested the DIY Remediation Blueprint 
-    requestConsultant: boolean;// User requested a 1-on-1 expert consultation 
+    requestRealEstimates: boolean;// User opted in to being matched with local contractors - handled on your end 
+    requestDiyBlueprint: boolean;// User requested the DIY Remediation Blueprint  - optional shop form with pdf upload/download functionality for user
+    requestConsultant: boolean;// User requested a 1-on-1 expert consultation  - optional shop form with pdf upload/download functionality for user
 
     /*User Info */
     contact: ContactInfo;
@@ -226,6 +226,11 @@ export interface Estimate {
     consultationDelivered?: boolean;   // PDF was uploaded AND sent/delivered to the user
 }
 
+
+export interface Shop{
+  paymentUrl: string;
+  pricePoint: number;
+}
 export interface GlobalStats {
 
   totalSubmissions: number;       // Total number of submissions ever recorded
@@ -253,6 +258,11 @@ export interface GlobalStats {
   handledContractorMatch: number;        // contractorMatchStatus === 'completed'
   handledBlueprint: number;              // blueprintDelivered === true
   handledConsultation: number;           // consultationDelivered === true
+
+  /*diy shop */
+  diyShop: Shop;
+  /*remote consultation shop */
+  remoteConsultShop: Shop;
 }
 
 

@@ -4,7 +4,7 @@ import { ShieldCheck } from "lucide-react"
 import Link from "next/link"
 import { signOut, useSession } from 'next-auth/react'
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 export type HeaderProps = {
     brandName?:string;
@@ -13,7 +13,7 @@ export default function Header({brandName = 'MoldCosts'}:HeaderProps){
     const { data: session } = useSession()
     const isAdmin = session?.user?.admin === true
     const router = useRouter()
-
+    const pathname = usePathname()
     
     // Track if user has audit data in sessionStorage
     const [hasEstimateData, setHasEstimateData] = useState(false)
@@ -27,17 +27,14 @@ export default function Header({brandName = 'MoldCosts'}:HeaderProps){
 
       checkEstimateSession()
 
-      // Listen for storage changes (when user logs in/out)
-      window.addEventListener('storage', checkEstimateSession)
-      
-      // Custom event for same-tab updates
-      window.addEventListener('estimate-session-change', checkEstimateSession)
+      window.addEventListener('storage', checkEstimateSession)      // Listen for storage changes (when user logs in/out)
+      window.addEventListener('estimate-session-change', checkEstimateSession) // Custom event for same-tab updates
 
       return () => {
         window.removeEventListener('storage', checkEstimateSession)
         window.removeEventListener('estimate-session-change', checkEstimateSession)
       }
-    }, [])
+    }, [pathname])
 
     const handleSignOut = () => {
         if(isAdmin){
@@ -52,7 +49,6 @@ export default function Header({brandName = 'MoldCosts'}:HeaderProps){
             router.push('/')
         }
         else{
-            alert("Should never hit here")
             router.push('/')
         }
     }

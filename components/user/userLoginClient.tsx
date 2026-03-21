@@ -1,20 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ShieldCheck, ChevronLeft, UserRound } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import SignInViewSection from './signInViewSection';
 import RecoverySection from './recoverySection';
 import BackButtonDefault from '../shared/backButton';
 import { verifyUserAccess } from '@/app/actions/firebaseActions/verifyUserAccess';
 import RecoverySentSection from './recoverySentSection';
+import { sendRecoveryEmail } from '@/app/actions/resendActions/sendRecoveryEmail';
 
 type View = 'signin' | 'recovery' | 'recovery-sent';
 
 export default function UserLoginClient() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  //meta state
   const [view, setView] = useState<View>('signin');
 
   // Sign-in state
@@ -24,18 +28,28 @@ export default function UserLoginClient() {
   // Recovery state
   const [recoveryEmail, setRecoveryEmail] = useState('');
 
+  // auto login state
+  const [autoLogging, setAutoLogging] = useState(false)
+  const hasAutoSubmitted = useRef(false)
+
+
   const handleRecovery = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.error("Email Feature has not been implemented yet. Check Back Later")
+    const response = await sendRecoveryEmail({toEmail: recoveryEmail})
+  
+    toast.error("If you have an associated email, you should recieve instructions shortly.")
+    if(response.error){
+      console.log("Error occured: ", response.error)
+    }
   }
 
 
-  async function performLogin(){
-      const loginEmail = email
-      const loginReportId = accountId
+  async function performLogin(loginEmail?: string, loginReportId?: string){
+      const resolvedEmail = loginEmail ?? email      // use param if provided, else state
+      const resolvedReportId = loginReportId ?? accountId
       // Sanitize inputs
-      const sanitizedEmail = loginEmail.trim()
-      const sanitizedReportId = loginReportId.trim()
+      const sanitizedEmail = resolvedEmail.trim()
+      const sanitizedReportId = resolvedReportId.trim()
 
       try {
           const result = await verifyUserAccess(sanitizedEmail, sanitizedReportId)
@@ -45,18 +59,47 @@ export default function UserLoginClient() {
           if (result.success && result.estimate) {
               sessionStorage.setItem('estimate', JSON.stringify(result.estimate))
               
-              //window.dispatchEvent(new Event('estimate-session-change'))
+              window.dispatchEvent(new Event('estimate-session-change'))
               router.push('/user/report')
           } else {
+              setAutoLogging(false)
               toast.error(`Unable to Login. Invalid Email and/or Estimate ID`)
           }
       } catch (err) {
           console.error('Login error:', err)
+          setAutoLogging(false)
           toast.error('An error occurred. Please try again later.')
       } 
   }
 
+  // Auto-submit if URL params are present
+  useEffect(() => {
+    const urlEmail = searchParams.get('email')
+    const urlReportId = searchParams.get('estimateId')
 
+    if (urlEmail && urlReportId && !hasAutoSubmitted.current) {
+      hasAutoSubmitted.current = true
+      setEmail(urlEmail)
+      setAccountId(urlReportId)
+      setAutoLogging(true)
+      performLogin(urlEmail, urlReportId)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
+
+  
+  // Full screen auto-login loading state
+  if (autoLogging) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#0d9488] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-[#1e3a5f] font-semibold text-lg">Loading your report…</p>
+          <p className="text-slate-400 text-sm mt-1">Verifying your credentials</p>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className=" max-w-md mx-auto fade-in p-6 rounded-3xl shadow-2xl border border-slate-100 relative">
       
