@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getRemoteConsultShop } from "@/app/actions/firebaseActions/globalStats/getGlobalStats";
 import RemoteClient from "@/components/user/services/remoteClient";
 import { toast } from "sonner";

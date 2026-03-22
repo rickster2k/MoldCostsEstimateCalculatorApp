@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getDiyShop } from "@/app/actions/firebaseActions/globalStats/getGlobalStats";
 import DiyClient from "@/components/user/services/diyClient";
 import { toast } from "sonner";
