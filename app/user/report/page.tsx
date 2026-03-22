@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import ReportClient from "@/components/user/reportClient";
 import { verifyUserIsValid } from "@/lib/auth/verifyUserIsValid";
 

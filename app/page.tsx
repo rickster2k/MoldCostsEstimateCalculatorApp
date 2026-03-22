@@ -1,8 +1,10 @@
+export const dynamic = 'force-dynamic'
+
 import { LandingPage } from "@/components/homePage/landingPage";
-//import ensureGlobalStats from "./actions/firebaseActions/globalStats/ensureGlobalStats";
+import ensureGlobalStats from "./actions/firebaseActions/globalStats/ensureGlobalStats";
 
 export default async function Home() {
-  //await ensureGlobalStats()
+  await ensureGlobalStats()
 
   
   return (

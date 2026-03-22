@@ -1,8 +1,11 @@
+export const dynamic = 'force-dynamic'
+
 import { getGlobalStats } from "@/app/actions/firebaseActions/globalStats/getGlobalStats";
 import AdminClientDashboard from "@/components/admin/adminClientDashboard";
 import { verifyAdminIsValid } from "@/lib/auth/verifyAdminIsValid";
 import { GlobalStats } from "@/lib/types";
 import { toast } from "sonner";
+
 
 export default async function Dashboard(){
     verifyAdminIsValid() //verify admin status
