@@ -1,3 +1,5 @@
+export type EstimatePdfType = 'blueprint' | 'consultation'
+
 // ─── Estimator answer types ───────────────────────────────────────────────────
 // Each type maps directly to one question step in the estimator flow.
 

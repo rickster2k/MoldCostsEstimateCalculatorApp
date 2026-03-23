@@ -9,4 +9,3 @@ export function fmt(n: number) {
   return n.toLocaleString(undefined, { maximumFractionDigits: 0 });
 }
 
- export const Capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);

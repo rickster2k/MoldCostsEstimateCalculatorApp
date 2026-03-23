@@ -1,5 +1,5 @@
 import { CalculationResult } from '@/lib/types'
-import { Capitalize } from '@/lib/utils'
+import { Capitalize } from '@/lib/utils/formattingUtils'
 
 interface EstimateResultsEmailProps {
   firstName: string

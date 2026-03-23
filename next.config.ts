@@ -17,7 +17,12 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       }
     ]
-  }
+  },
+  experimental: {
+      serverActions: {
+          bodySizeLimit: '15mb', // adjust to whatever max PDF size you expect
+      },
+  },
 };
 
 export default nextConfig;

@@ -1,9 +1,11 @@
 export const dynamic = 'force-dynamic'
 
+import { getServiceAlertSubmissionsPagination } from "@/app/actions/firebaseActions/estimateActions/alertTab/getAlertsPagination";
+import { getEstimateSubmissionsPagination } from "@/app/actions/firebaseActions/estimateActions/estimateTab/getEstimateSubmissionsPagination";
 import { getGlobalStats } from "@/app/actions/firebaseActions/globalStats/getGlobalStats";
 import AdminClientDashboard from "@/components/admin/adminClientDashboard";
 import { verifyAdminIsValid } from "@/lib/auth/verifyAdminIsValid";
-import { GlobalStats } from "@/lib/types";
+import { Estimate, GlobalStats } from "@/lib/types";
 import { toast } from "sonner";
 
 
@@ -32,7 +34,41 @@ export default async function Dashboard(){
 
     const response = await getGlobalStats()
     if(!response.success){toast.error("Failed to get Global Stats using default values")}
+
+
+    /*Grab estimate data with pagination  */
+    const estimatePaginationResponse = await getEstimateSubmissionsPagination()
+    let estimates: Estimate[] = []
+    let nextCursor_estimate: string = ""
+    let hasMore_estimate: boolean = false
+
+    if (estimatePaginationResponse.success){
+        estimates= estimatePaginationResponse.data
+        nextCursor_estimate = estimatePaginationResponse.nextCursor ?? ""
+        hasMore_estimate = estimatePaginationResponse.hasMore
+    }
+
+    /*Alerts */
+    let alerts: Estimate[] = []
+    let nextCursor_alert: string = ""
+    let hasMore_alert: boolean = false
+ 
+    const alertResponse = await getServiceAlertSubmissionsPagination()
+    if (alertResponse.success) {
+        alerts = alertResponse.data
+        nextCursor_alert = alertResponse.nextCursor ?? ""
+        hasMore_alert = alertResponse.hasMore
+    }
+
     return (
-        <AdminClientDashboard stats={response.globalStats || exampleGlobalStats}/>
+        <AdminClientDashboard 
+            stats={response.globalStats || exampleGlobalStats}
+            estimates={estimates}
+            nextCursor_estimate={nextCursor_estimate}
+            hasMore_estimate={hasMore_estimate}
+            alerts={alerts}
+            nextCursor_alert={nextCursor_alert}
+            hasMore_alert={hasMore_alert}
+        />
     )
 }

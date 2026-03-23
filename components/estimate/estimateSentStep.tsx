@@ -1,6 +1,6 @@
 'use client'
 
-import { Capitalize } from '@/lib/utils'
+import { Capitalize } from '@/lib/utils/formattingUtils'
 import { ChevronRight, Mail } from 'lucide-react'
 import Link from 'next/link'
 
