@@ -30,7 +30,7 @@ const FAKE_RESULTS: CalculationResult = {
         foggingCost:           0,
     },
 }
-const USE_FAKE_RESULTS = true // TODO: set to false once Gemini API key is configured
+const USE_FAKE_RESULTS = false // TODO: set to false once Gemini API key is configured
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function IntakeClient({ contactInfo, setContact, zipCode, estimateData, goBack }: IntakeClientProps) {
