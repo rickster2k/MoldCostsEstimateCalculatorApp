@@ -36,7 +36,7 @@ export default function AdminEstimatePreview({ estimate, onClose }: Props) {
                 {(estimate.blueprintPdf || estimate.consultationPdf) &&
                     <UserDownloadPdfModal estimate={estimate} />
                 }
-                <UserReport estimate={estimate} />
+                <UserReport estimate={estimate} disableLinks={true}/>
             </div>
         </div>
     )

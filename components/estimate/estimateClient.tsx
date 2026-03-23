@@ -8,6 +8,7 @@ import { ContactInfo, EstimateData } from '@/lib/types'
 import { DEFAULT_ESTIMATE_DATA } from '@/lib/constants'
 import ProgressBar from './progressBar'
 import IntakeClient from './intakeClient'
+import { useRouter } from 'next/navigation'
 
 
 const TOTAL_STEPS = 22
@@ -19,6 +20,7 @@ const DEFAULT_CONTACT: ContactInfo = {
 
 
 export default function EstimatorClient() {
+  const router = useRouter()
 
   // ── Navigation 
   const [currentStep, setCurrentStep] = useState(1)
@@ -38,8 +40,14 @@ export default function EstimatorClient() {
     }
   }, [isTransitioning])
 
-  const goBack = useCallback(() => setCurrentStep(s => Math.max(s - 1, 1)), [])
-
+  //const goBack = useCallback(() => setCurrentStep(s => Math.max(s - 1, 1)), [])
+  const goBack = useCallback(() => {
+    if (currentStep === 1) {
+      router.push('/')
+    } else {
+      setCurrentStep(s => Math.max(s - 1, 1))
+    }
+  }, [currentStep, router])
   // ── Estimate data 
   const [data, setData] = useState<EstimateData>(DEFAULT_ESTIMATE_DATA)
   

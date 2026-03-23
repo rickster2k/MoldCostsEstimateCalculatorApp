@@ -441,7 +441,7 @@ export default function AdminServiceAlertTab({
     return (
         <div className="space-y-6">
 
-            {/* Stat cards */}
+            {/* Stat cards 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {statCards.map((card) => (
                     <div key={card.label} className="bg-white rounded-xl border border-slate-100 p-4 flex flex-col gap-3">
@@ -454,7 +454,7 @@ export default function AdminServiceAlertTab({
                         </div>
                     </div>
                 ))}
-            </div>
+            </div>*/}
 
             {/* Table card */}
             <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">

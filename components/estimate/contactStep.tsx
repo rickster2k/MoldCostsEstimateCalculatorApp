@@ -4,6 +4,7 @@ import { ChevronRight, ChevronLeft } from 'lucide-react'
 import { ContactInfo } from '@/lib/types'
 import { COUNTRIES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import Link from 'next/link'
 
 interface ContactStepProps {
   contact: ContactInfo
@@ -96,10 +97,11 @@ export default function ContactStep({ contact, setContact, dataZipCode, onSubmit
 
         <button type="submit"
           disabled={isSubmitting}
-          className="w-full py-5 rounded-2xl bg-green-600 text-white font-black text-lg shadow-xl shadow-green-200 hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
+          className="w-full py-5 rounded-2xl bg-theme1 text-white font-black text-lg shadow-xl shadow-teal-200 hover:bg-theme1Shade disabled:opacity-60 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
         >
           {isSubmitting ? 'Calculating…' : <>Get Your Estimate <ChevronRight className="w-6 h-6" /></>}
         </button>
+        <p className='text-slate-400 text-center'> By submitting your contact info, you are agreeing to our <Link href='/tos' target='_blank' className="underline">Terms of Service</Link> and <Link href="/privacy" target='_blank' className='underline'>Privacy Policy</Link>.</p>
       </form>
 
       <button type="button" onClick={onBack}

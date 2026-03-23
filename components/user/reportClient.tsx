@@ -58,7 +58,7 @@ export default function ReportClient(){
             {(estimate.blueprintPdf || estimate.consultationPdf)  && 
                 <UserDownloadPdfModal estimate={estimate}/>            
             }
-            <UserReport estimate={estimate}/>
+            <UserReport estimate={estimate} disableLinks={false}/>
         </div>
     )
 }

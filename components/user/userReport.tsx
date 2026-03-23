@@ -17,7 +17,7 @@ import { COUNTRIES } from '@/lib/constants'
 import { updateServiceRequests } from '@/app/actions/firebaseActions/estimateActions/updateServiceRequests'
 import { ACCESSIBILITY_LABELS, AD_ROWS, AREA_SIZE_LABELS, CAUSE_LABELS, FOGGING_LABELS, HEALTH_SYMPTOMS_LABELS, HIRING_TIMELINE_LABELS, PROPERTY_SIZE_LABELS, PROPERTY_TYPE_LABELS, SEVERITY_LABELS, START_TIME_LABELS, YES_NO_LABELS } from './constants/userReportConstants'
 
-export default function UserReport({ estimate }: { estimate: Estimate }) {
+export default function UserReport({ estimate, disableLinks=false }: { estimate: Estimate, disableLinks: boolean }) {
     const { estimateResults, estimateId, data, contact } = estimate
     const { lowEstimate, highEstimate, averageEstimate, breakdown } = estimateResults
     console.log("contact info: ", contact)
@@ -139,19 +139,19 @@ export default function UserReport({ estimate }: { estimate: Estimate }) {
     
     <AdvertisementSection>
         <div className='flex flex-col gap-2'>
-            {AD_ROWS.map(row => (
-                <Link 
-                    className={`rounded-2xl border p-4 font-semibold transition-colors ${row.bg} ${row.border} ${row.text} ${row.hover}`}
-                    href={`/user/report#${row.targetId}`}
-                    key={row.targetId}
-                >
+            {AD_ROWS.map(row => {
+                const className = `rounded-2xl border p-4 font-semibold transition-colors ${row.bg} ${row.border} ${row.text} ${row.hover}`
+                const inner = (
                     <div className="flex items-center justify-between gap-2">
                         <div>{row.label}</div>
                         <ArrowRight className='w-6 h-6 shrink-0' />
                     </div>
-                </Link>
-               
-            ))}
+                )
+
+                return disableLinks
+                    ? <div key={row.targetId} className={className}>{inner}</div>
+                    : <Link key={row.targetId} className={className} href={`/user/report#${row.targetId}`}>{inner}</Link>
+            })}
         </div>
     </AdvertisementSection>
     
@@ -306,7 +306,7 @@ export default function UserReport({ estimate }: { estimate: Estimate }) {
 
             <button
                 onClick={handleUpdateContact}
-                disabled={isUpdatingContact}
+                disabled={isUpdatingContact || disableLinks}
                 className="w-full py-3 rounded-2xl bg-theme1 hover:bg-theme1Shade text-white font-bold transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                 {isUpdatingContact ? 'Saving…' : 'Save Contact Info'}
@@ -335,6 +335,7 @@ export default function UserReport({ estimate }: { estimate: Estimate }) {
                 <p className='font-light text-slate-100 pb-4 sm:text-sm'>{row.description}</p>
                 
                 <button
+                    disabled={disableLinks}
                     onClick={() => row.setter(!isActive)}
                     className='flex items-center gap-3 w-fit cursor-pointer group'
                 >
@@ -349,10 +350,12 @@ export default function UserReport({ estimate }: { estimate: Estimate }) {
                     <>
                         <hr className="border-slate-300 mt-4" />
                         <div className='flex flex-col mt-4 bg-white rounded-2xl p-4 items-center gap-2'>
-                            
-                            <Link className='bg-theme1 hover:bg-theme1Shade font-semibold text-white p-2 px-8 rounded-2xl' href={`/user/report${row.hrefEndpoint}`}> {row.buttonName}</Link>
-                            <p className='text-slate-500 text-sm text-center '> You have indicated interest in the above service, make sure to click the button
-                                <span className='font-bold'> Update Interest of Selected Services</span> to save your selections. 
+                            {disableLinks
+                                ? <div className='bg-theme1 font-semibold text-white p-2 px-8 rounded-2xl opacity-60 cursor-not-allowed'>{row.buttonName}</div>
+                                : <Link className='bg-theme1 hover:bg-theme1Shade font-semibold text-white p-2 px-8 rounded-2xl' href={`/user/report${row.hrefEndpoint}`}>{row.buttonName}</Link>
+                            }
+                            <p className='text-slate-500 text-sm text-center'>You have indicated interest in the above service, make sure to click the button
+                                <span className='font-bold'> Update Interest of Selected Services</span> to save your selections.
                             </p>
                         </div>
                     </>
@@ -365,7 +368,7 @@ export default function UserReport({ estimate }: { estimate: Estimate }) {
 
             <button
                 onClick={handleUpdateServiceRequests}
-                disabled={isUpdatingServices}
+                disabled={isUpdatingServices || disableLinks}
                 className="w-full py-3 rounded-2xl bg-theme1 hover:bg-theme1Shade text-white font-bold transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
                 {isUpdatingServices ? 'Sending…' : 'Update Interest of Selected Services'} 

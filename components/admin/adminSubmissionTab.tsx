@@ -346,7 +346,7 @@ export default function AdminSubmissionTab({
             icon: Bell,
             color: 'text-red-500',
             bg: 'bg-red-100',
-        },
+        },/*
         {
             label: 'Pending Contractor Match',
             value: globalStats.pendingContractorMatch.toLocaleString(),
@@ -367,7 +367,7 @@ export default function AdminSubmissionTab({
             icon: ShieldCheck,
             color: 'text-blue-600',
             bg: 'bg-blue-100',
-        },
+        },*/
     ]
 
     // ── Render ──────────────────────────────────────────────────────────────
@@ -375,9 +375,9 @@ export default function AdminSubmissionTab({
     return (
         <div className="space-y-6">
             {/* Stat cards */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="flex flex-wrap justify-center  gap-16">
                 {statCards.map((card) => (
-                    <div key={card.label} className="bg-white rounded-xl border border-slate-100 p-4 flex flex-col gap-3">
+                    <div key={card.label} className="bg-white rounded-xl border border-slate-100 p-4 flex flex-col gap-3 min-w-36 items-center text-center">
                         <div className={`w-9 h-9 ${card.bg} rounded-lg flex items-center justify-center ${card.color}`}>
                             <card.icon className="w-4 h-4" />
                         </div>
