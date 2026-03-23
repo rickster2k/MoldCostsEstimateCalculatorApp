@@ -19,6 +19,7 @@ import { usePagination } from "@/lib/hooks/usePagination"
 import PaginationControls from "../shared/paginationControls"
 import { getEstimateSubmissionsFiltered } from "@/app/actions/firebaseActions/estimateActions/estimateTab/getEstimateSubmissionsFiltered"
 import { getAllEstimateSubmissionsFiltered } from "@/app/actions/firebaseActions/estimateActions/estimateTab/getAllEstimateSubmissionsFiltered"
+import AdminEstimatePreview from "./adminEstimatePreview"
 
 // ── Filter types ──────────────────────────────────────────────────────────────
 
@@ -554,7 +555,7 @@ export default function AdminSubmissionTab({
 
             {/* Detail drawer — simple inline expand for now, swap for a modal/sheet if preferred */}
             {selectedEstimate && (
-                <EstimateDetailPanel
+                 <AdminEstimatePreview
                     estimate={selectedEstimate}
                     onClose={() => setSelectedEstimate(null)}
                 />
@@ -588,139 +589,3 @@ function ContractorStatusBadge({ status }: { status?: string }) {
     )
 }*/
 
-// ── Estimate detail panel ─────────────────────────────────────────────────────
-
-function EstimateDetailPanel({ estimate, onClose }: { estimate: Estimate; onClose: () => void }) {
-    const { contact, data, estimateResults, estimateAmount } = estimate
-
-    const rows: { label: string; value: string }[] = [
-        { label: 'Property Type', value: data.propertyType.replace(/-/g, ' ') },
-        { label: 'Property Size', value: data.propertySize.replace(/-/g, ' ') + ' sq ft' },
-        { label: 'Zip Code', value: data.zipCode },
-        { label: 'Country', value: contact.country },
-        { label: 'Affected Locations', value: data.affectedLocations.map(l => l.replace(/-/g, ' ')).join(', ') },
-        { label: 'Affected Area', value: data.areaSizeCategory.replace(/-/g, ' ') + ' sq ft' },
-        { label: 'Severity', value: data.severity },
-        { label: 'Cause', value: data.cause },
-        { label: 'Moisture Fixed', value: data.moistureFixed },
-        { label: 'When Noticed', value: data.startTime.replace(/-/g, ' ') },
-        { label: 'Accessibility', value: data.accessibility.replace(/-/g, ' ') },
-        { label: 'HVAC Affected', value: data.hvacAffected },
-        { label: 'Furniture Affected', value: data.furnitureAffected },
-        { label: 'Health Symptoms', value: data.healthSymptoms },
-        { label: 'Needs Testing', value: data.needsTesting },
-        { label: 'Fogging Interest', value: data.foggingInterest },
-        { label: 'Insurance Claim', value: data.planInsuranceClaim },
-        { label: 'Has Insurance', value: data.hasInsurance },
-        { label: 'Hiring Timeline', value: data.hiringTimeline.replace(/-/g, ' ') },
-    ]
-
-    const validPrevEstimates = data.previousEstimates.filter(
-        (e) => e.companyName || e.cityName || e.priceEstimate
-    )
-
-    return (
-        <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
-            {/* Panel header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
-                <div className="space-y-0.5">
-                    <h3 className="font-bold text-slate-900">
-                        {Capitalize(contact.firstName)} {Capitalize(contact.lastName)}
-                        <span className="ml-3 font-mono text-blue-600 text-sm font-bold">{estimate.estimateId}</span>
-                    </h3>
-                    <p className="text-xs text-slate-400">{contact.email} · {contact.phone || 'No phone'}</p>
-                </div>
-                <button
-                    onClick={onClose}
-                    className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
-                >
-                    <X className="w-4 h-4" />
-                </button>
-            </div>
-
-            <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Estimate cost summary */}
-                <div className="bg-slate-900 rounded-xl p-5 text-white space-y-4">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Estimate</div>
-                    <div className="text-3xl font-bold">
-                        ${estimateAmount.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                    </div>
-                    <div className="text-slate-400 text-xs">
-                        Range: ${estimateResults.lowEstimate.toLocaleString(undefined, { maximumFractionDigits: 0 })} – ${estimateResults.highEstimate.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                    </div>
-                    <div className="border-t border-white/10 pt-4 space-y-2 text-xs">
-                        <div className="flex justify-between">
-                            <span className="text-slate-400">Base Cost</span>
-                            <span className="font-mono">${estimateResults.breakdown.baseCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-slate-400">Severity</span>
-                            <span className="font-mono">+${estimateResults.breakdown.severityAdjustment.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-slate-400">Complexity</span>
-                            <span className="font-mono">+${estimateResults.breakdown.complexityAdjustment.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
-                        </div>
-                        {estimateResults.breakdown.additionalServices > 0 && (
-                            <div className="flex justify-between">
-                                <span className="text-slate-400">Add-ons</span>
-                                <span className="font-mono">+${estimateResults.breakdown.additionalServices.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
-                            </div>
-                        )}
-                        {estimateResults.breakdown.foggingCost > 0 && (
-                            <div className="flex justify-between">
-                                <span className="text-slate-400">Fogging</span>
-                                <span className="font-mono">+${estimateResults.breakdown.foggingCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Service requests */}
-                    <div className="border-t border-white/10 pt-4 space-y-2">
-                        <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Service Requests</div>
-                        <div className="flex items-center gap-2 text-xs">
-                            <div className={`w-2 h-2 rounded-full ${estimate.requestRealEstimates ? 'bg-emerald-400' : 'bg-slate-600'}`} />
-                            <span className={estimate.requestRealEstimates ? 'text-white' : 'text-slate-500'}>Real Estimates</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-xs">
-                            <div className={`w-2 h-2 rounded-full ${estimate.requestDiyBlueprint ? 'bg-orange-400' : 'bg-slate-600'}`} />
-                            <span className={estimate.requestDiyBlueprint ? 'text-white' : 'text-slate-500'}>DIY Blueprint</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-xs">
-                            <div className={`w-2 h-2 rounded-full ${estimate.requestConsultant ? 'bg-blue-400' : 'bg-slate-600'}`} />
-                            <span className={estimate.requestConsultant ? 'text-white' : 'text-slate-500'}>Consultation</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Q&A answers */}
-                <div className="lg:col-span-2 space-y-4">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Questionnaire Answers</h4>
-                    <div className="grid grid-cols-2 gap-x-8 gap-y-3">
-                        {rows.map((row) => (
-                            <div key={row.label}>
-                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{row.label}</div>
-                                <div className="text-sm font-semibold text-slate-700 capitalize mt-0.5">{row.value}</div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {validPrevEstimates.length > 0 && (
-                        <div className="pt-2">
-                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Previous Estimates Received</div>
-                            <div className="space-y-1">
-                                {validPrevEstimates.map((e, i) => (
-                                    <div key={i} className="text-xs text-slate-600 font-medium">
-                                        {e.companyName && <span className="font-bold text-slate-800">{e.companyName}</span>}
-                                        {e.cityName && <span className="text-slate-400"> · {e.cityName}</span>}
-                                        {e.priceEstimate && <span className="text-slate-700"> — {e.priceEstimate}</span>}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
-    )
-}
