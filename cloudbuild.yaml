@@ -50,7 +50,7 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'moldcosts'
+      - 'moldcostsclouddeployment'
       - '--image'
       - 'gcr.io/$PROJECT_ID/moldcosts:$SHORT_SHA'
       - '--region'
