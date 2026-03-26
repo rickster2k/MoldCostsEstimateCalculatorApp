@@ -163,7 +163,7 @@ export function EstimateResultsEmail({ firstName, estimateId, estimateResults, e
                   fontSize: '15px',
                 }}
               >
-                Click Here to Learn More About DIY Remediation →
+                Learn More About DIY Remediation →
               </a>
             </div>
             <div style={{ margin: '0 0 28px 0' }}>
@@ -180,7 +180,7 @@ export function EstimateResultsEmail({ firstName, estimateId, estimateResults, e
                   fontSize: '15px',
                 }}
               >
-                Click Here to Learn More About Remote Remediation Consultant →
+                Learn More About Remote Remediation Consultants →
               </a>
             </div>
 
