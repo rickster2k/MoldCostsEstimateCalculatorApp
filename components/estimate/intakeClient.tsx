@@ -30,7 +30,7 @@ const FAKE_RESULTS: CalculationResult = {
         foggingCost:           0,
     },
 }
-const USE_FAKE_RESULTS = false // TODO: set to false once Gemini API key is configured
+//const USE_FAKE_RESULTS = false // TODO: set to false once Gemini API key is configured
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function IntakeClient({ contactInfo, setContact, zipCode, estimateData, goBack }: IntakeClientProps) {
@@ -55,12 +55,12 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
             // Step 1: Get calculation results
             // Use local variable (not state) for all downstream steps —
             // setResults is async and state won't be updated until next render.
-            let results: CalculationResult
+            //let results: CalculationResult
 
-            if (USE_FAKE_RESULTS) {
-                console.warn("⚠️ Using fake results — swap USE_FAKE_RESULTS to false once API key is set")
-                results = FAKE_RESULTS
-            } else {
+            //if (USE_FAKE_RESULTS) {
+            //    console.warn("⚠️ Using fake results — swap USE_FAKE_RESULTS to false once API key is set")
+            //    results = FAKE_RESULTS
+            //} else {
                 console.log("Calling Gemini calculateEstimate...")
                 const response = await calculateEstimate(estimateData)
                 if (!response.success || !response.data) {
@@ -69,9 +69,9 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
                     return
                 }
                 console.log("Gemini response:", response.data)
-                results = response.data
+                const results = response.data
                 toast.success("Your results have been calculated!")
-            }
+            //}
 
             // Step 2: Build submission object
             const estimateSubmissionObj: EstimateNoId = {
