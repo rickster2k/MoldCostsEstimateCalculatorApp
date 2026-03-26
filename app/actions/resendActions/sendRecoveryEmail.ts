@@ -50,6 +50,7 @@ export async function sendRecoveryEmail(  params: SendRecoveryEmailParams): Prom
         to:      toEmail,
         subject: `Your MoldCost's Estimate ID — ${estimateId}`,
         react:   RecoveryEmail({
+            email: toEmail,
             estimateId,
             firstName:      contact.firstName,
             submissionDate,

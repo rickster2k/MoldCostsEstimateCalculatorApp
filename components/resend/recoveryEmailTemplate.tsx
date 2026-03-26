@@ -2,6 +2,7 @@ interface RecoveryEmailProps {
   estimateId: string
   firstName: string
   submissionDate: string
+  email: string
 }
 
 // oklch(0.55 0.13 186) ≈ #0d9e8f — used as --theme1 accent
@@ -13,7 +14,7 @@ const TEXT_MAIN   = '#1a3a39'
 const TEXT_MUTED  = '#4a7370'
 const TEXT_SUBTLE = '#6b9694'
 
-export function RecoveryEmail({ estimateId, firstName, submissionDate }: RecoveryEmailProps) {
+export function RecoveryEmail({ email, estimateId, firstName, submissionDate }: RecoveryEmailProps) {
   const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
 
   return (
@@ -186,7 +187,7 @@ export function RecoveryEmail({ estimateId, firstName, submissionDate }: Recover
             {/* ── CTA ── */}
             <div style={{ margin: '0 0 32px 0' }}>
               <a
-                href="https://www.moldcosts.com/login"
+                 href={`${process.env.NEXT_PUBLIC_APP_URL}/user/login?email=${encodeURIComponent(email)}&estimateId=${encodeURIComponent(estimateId)}`}
                 style={{
                   display: 'inline-block',
                   textDecoration: 'none',
