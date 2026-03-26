@@ -103,10 +103,14 @@ export async function getAllEstimateSubmissionsFiltered(
         .orderBy('timestamp', 'desc')
 
       if (dateFrom) {
-        query = query.where('timestamp', '>=', dateFrom)
+          const from = new Date(dateFrom + 'T00:00:00.000Z')
+          from.setUTCDate(from.getUTCDate() - 1)
+          query = query.where('timestamp', '>=', from.toISOString())
       }
       if (dateTo) {
-        query = query.where('timestamp', '<=', dateTo + 'T23:59:59.999Z')
+          const to = new Date(dateTo + 'T23:59:59.999Z')
+          to.setUTCDate(to.getUTCDate() + 1)
+          query = query.where('timestamp', '<=', to.toISOString())
       }
 
       const snapshot = await query.get()

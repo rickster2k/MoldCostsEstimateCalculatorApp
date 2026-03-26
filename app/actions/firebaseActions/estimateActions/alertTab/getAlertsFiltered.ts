@@ -124,8 +124,16 @@ export async function getServiceAlertSubmissionsFiltered(
         .collection('estimates')
         .orderBy('timestamp', 'desc')
 
-      if (dateFrom) query = query.where('timestamp', '>=', dateFrom)
-      if (dateTo)   query = query.where('timestamp', '<=', dateTo + 'T23:59:59.999Z')
+      if (dateFrom) {
+          const from = new Date(dateFrom + 'T00:00:00.000Z')
+          from.setUTCDate(from.getUTCDate() - 1)
+          query = query.where('timestamp', '>=', from.toISOString())
+      }
+      if (dateTo) {
+          const to = new Date(dateTo + 'T23:59:59.999Z')
+          to.setUTCDate(to.getUTCDate() + 1)
+          query = query.where('timestamp', '<=', to.toISOString())
+      }
 
       snapshot = await query.get()
 

@@ -54,10 +54,14 @@ export async function getEstimateSubmissionsFiltered(
 
     } else if (searchType === 'dateRange') {
       if (dateFrom) {
-        baseQuery = baseQuery.where('timestamp', '>=', dateFrom)
+          const from = new Date(dateFrom + 'T00:00:00.000Z')
+          from.setUTCDate(from.getUTCDate() - 1)
+          baseQuery = baseQuery.where('timestamp', '>=', from.toISOString())
       }
       if (dateTo) {
-        baseQuery = baseQuery.where('timestamp', '<=', dateTo + 'T23:59:59.999Z')
+          const to = new Date(dateTo + 'T23:59:59.999Z')
+          to.setUTCDate(to.getUTCDate() + 1)
+          baseQuery = baseQuery.where('timestamp', '<=', to.toISOString())
       }
 
     } else if (searchType === 'name' && trimmed) {
