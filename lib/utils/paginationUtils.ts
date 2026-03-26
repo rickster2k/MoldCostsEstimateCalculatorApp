@@ -2,7 +2,7 @@
 
 import { Query, DocumentSnapshot } from 'firebase-admin/firestore'
 
-export const DEFAULT_PAGE_SIZE = 15
+export const DEFAULT_PAGE_SIZE = 10
 
 export interface PaginatedResult<T> {
   data: T[]

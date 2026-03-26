@@ -1,6 +1,6 @@
 'use client'
-import { ContactInfo, Estimate, EstimateData, EstimateNoId } from "@/lib/types"
-import { useState } from "react"
+import { ContactInfo, Estimate, EstimateData, EstimateNoId, PreviousEstimate } from "@/lib/types"
+import { useEffect, useState } from "react"
 import ContactStep from "./contactStep"
 import { toast } from "sonner"
 import { calculateEstimate } from "@/app/actions/geminiActions/calculateEstimate"
@@ -36,9 +36,17 @@ const FAKE_RESULTS: CalculationResult = {
 
 export default function IntakeClient({ contactInfo, setContact, zipCode, estimateData, goBack }: IntakeClientProps) {
 
-    contactInfo.firstName = contactInfo.firstName//.toLowerCase()
-    contactInfo.lastName  = contactInfo.lastName//.toLowerCase()
+    //contactInfo.firstName = contactInfo.firstName//.toLowerCase()
+    //contactInfo.lastName  = contactInfo.lastName//.toLowerCase()
 
+    // Sync zip code from estimateData into contactInfo if not already set
+    useEffect(() => {
+        if (!contactInfo.zipCode && zipCode) {
+            setContact({ ...contactInfo, zipCode })
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+    
     const [isCalculating, setIsCalculating]       = useState(false)
     const [activeSubmission, setActiveSubmission] = useState<Estimate | null>(null)
     const [submitted, setSubmitted]               = useState(false)
@@ -52,7 +60,30 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
                 toast.error("Please make sure all information is filled out")
                 return
             }
+            // Sanitization block right after the guard:
+            const sanitizedContact: ContactInfo = {
+                ...contactInfo,
+                firstName:        contactInfo.firstName.trim().toLowerCase(),
+                lastName:         contactInfo.lastName.trim().toLowerCase(),
+                email:            contactInfo.email.trim().toLowerCase(),
+                phone:            contactInfo.phone?.trim() ?? '',
+                zipCode:          contactInfo.zipCode.trim(),
+                preferredContact: contactInfo.preferredContact,
+                country:          contactInfo.country.trim(),
+            }
 
+            // Sanitize previousEstimates in estimateData
+            const sanitizedEstimateData: EstimateData = {
+                ...estimateData,
+                previousEstimates: estimateData.previousEstimates.map(prev => ({
+                    companyName:   prev.companyName.trim(),
+                    cityName:      prev.cityName.trim(),
+                    priceEstimate: prev.priceEstimate.trim(),
+                })) as [PreviousEstimate, PreviousEstimate, PreviousEstimate],
+            }
+            
+            console.log("Current contactInfo that will be saved: ", sanitizedContact)
+            console.log("Estimate data being sent: ", sanitizedEstimateData)
             // Step 1: Get calculation results
             // Use local variable (not state) for all downstream steps —
             // setResults is async and state won't be updated until next render.
@@ -63,7 +94,7 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
             //    results = FAKE_RESULTS
             //} else {
                 console.log("Calling Gemini calculateEstimate...")
-                const response = await calculateEstimate(estimateData)
+                const response = await calculateEstimate(sanitizedEstimateData)
                 if (!response.success || !response.data) {
                     console.error("Gemini error:", response.error)
                     toast.error("There was a problem calculating your estimate. Please try again.")
@@ -77,13 +108,13 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
             // Step 2: Build submission object
             const estimateSubmissionObj: EstimateNoId = {
                 estimateAmount:      results.averageEstimate,
-                data:                estimateData,
+                data:                sanitizedEstimateData,
                 estimateResults:     results,
-                testingStatus:       'not-sure',
+                testingStatus:       sanitizedEstimateData.needsTesting,
                 requestRealEstimates: false,
                 requestDiyBlueprint:  false,
                 requestConsultant:    false,
-                contact:             contactInfo,
+                contact:             sanitizedContact,
             }
 
             // Step 3: Save to Firestore
@@ -130,7 +161,7 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
 
             // Step 5: Set httpOnly session cookie
             await verifyUserAccess(
-                estimateFullObj.contact.email.trim().toLowerCase(),
+                estimateFullObj.contact.email,
                 estimateFullObj.estimateId,
             )
 
