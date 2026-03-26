@@ -32,6 +32,7 @@ export default function ContactStep({ contact, setContact, dataZipCode, onSubmit
 
           <Field label="First Name">
             <input required type="text" placeholder="First Name"
+              autoCapitalize="words"
               value={contact.firstName}
               onChange={e => setContact({ ...contact, firstName: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-primary outline-none transition-all font-semibold text-slate-700"
@@ -41,6 +42,7 @@ export default function ContactStep({ contact, setContact, dataZipCode, onSubmit
           <Field label="Last Name">
             <input required type="text" placeholder="Last Name"
               value={contact.lastName}
+              autoCapitalize="words"
               onChange={e => setContact({ ...contact, lastName: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-primary outline-none transition-all font-semibold text-slate-700"
             />

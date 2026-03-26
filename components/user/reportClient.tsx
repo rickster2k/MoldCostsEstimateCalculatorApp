@@ -6,7 +6,6 @@ import { useEffect, useState } from "react"
 import UserReport from "./userReport"
 import { getEstimateById } from "@/app/actions/firebaseActions/estimateActions/getEstimateById"
 import { toast } from "sonner"
-import UserDownloadPdfModal from "./userDownloadPdfModal"
 
 export default function ReportClient(){
     const router = useRouter()
@@ -55,9 +54,6 @@ export default function ReportClient(){
 
     return (
         <div className="p-6 w-full relative">
-            {(estimate.blueprintPdf || estimate.consultationPdf)  && 
-                <UserDownloadPdfModal estimate={estimate}/>            
-            }
             <UserReport estimate={estimate} disableLinks={false}/>
         </div>
     )

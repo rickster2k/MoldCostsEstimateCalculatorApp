@@ -149,6 +149,43 @@ export function EstimateResultsEmail({ firstName, estimateId, estimateResults, e
               </a>
             </div>
 
+            <div style={{ margin: '0 0 28px 0' }}>
+              <a
+                href={`${process.env.NEXT_PUBLIC_APP_URL}/user/login?email=${encodeURIComponent(email)}&estimateId=${encodeURIComponent(estimateId)}&page=/diy`}
+                style={{
+                  display: 'inline-block',
+                  textDecoration: 'none',
+                  color: '#ffffff',
+                  backgroundColor: '#ea580c',
+                  padding: '14px 32px',
+                  borderRadius: '8px',
+                  fontWeight: 700,
+                  fontSize: '15px',
+                }}
+              >
+                Click Here to Learn More About DIY Remediation →
+              </a>
+            </div>
+            <div style={{ margin: '0 0 28px 0' }}>
+              <a
+                href={`${process.env.NEXT_PUBLIC_APP_URL}/user/login?email=${encodeURIComponent(email)}&estimateId=${encodeURIComponent(estimateId)}&page=/remote`}
+                style={{
+                  display: 'inline-block',
+                  textDecoration: 'none',
+                  color: '#ffffff',
+                  backgroundColor: '#2563eb',
+                  padding: '14px 32px',
+                  borderRadius: '8px',
+                  fontWeight: 700,
+                  fontSize: '15px',
+                }}
+              >
+                Click Here to Learn More About Remote Remediation Consultant →
+              </a>
+            </div>
+
+
+
             <p style={{ margin: '0 0 16px 0', color: TEXT_MUTED, lineHeight: 1.6 }}>
               Note: This estimate is based on the information you provided and is intended as a
               planning reference. Final costs may vary based on contractor assessment and local market conditions.

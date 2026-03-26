@@ -1,5 +1,5 @@
 'use client'
-import { CalculationResult, ContactInfo, Estimate, EstimateData, EstimateNoId } from "@/lib/types"
+import { ContactInfo, Estimate, EstimateData, EstimateNoId } from "@/lib/types"
 import { useState } from "react"
 import ContactStep from "./contactStep"
 import { toast } from "sonner"
@@ -18,6 +18,7 @@ type IntakeClientProps = {
 }
 
 // ── Fake results — swap out once Gemini API key is available ──────────────────
+/*
 const FAKE_RESULTS: CalculationResult = {
     lowEstimate:     3200,
     highEstimate:    4800,
@@ -29,14 +30,14 @@ const FAKE_RESULTS: CalculationResult = {
         additionalServices:    260,
         foggingCost:           0,
     },
-}
+}*/
 //const USE_FAKE_RESULTS = false // TODO: set to false once Gemini API key is configured
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function IntakeClient({ contactInfo, setContact, zipCode, estimateData, goBack }: IntakeClientProps) {
 
-    contactInfo.firstName = contactInfo.firstName.toLowerCase()
-    contactInfo.lastName  = contactInfo.lastName.toLowerCase()
+    contactInfo.firstName = contactInfo.firstName//.toLowerCase()
+    contactInfo.lastName  = contactInfo.lastName//.toLowerCase()
 
     const [isCalculating, setIsCalculating]       = useState(false)
     const [activeSubmission, setActiveSubmission] = useState<Estimate | null>(null)

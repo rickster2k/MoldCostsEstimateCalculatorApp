@@ -16,6 +16,7 @@ import { updateContactInfo } from '@/app/actions/firebaseActions/estimateActions
 import { COUNTRIES } from '@/lib/constants'
 import { updateServiceRequests } from '@/app/actions/firebaseActions/estimateActions/updateServiceRequests'
 import { ACCESSIBILITY_LABELS, AD_ROWS, AREA_SIZE_LABELS, CAUSE_LABELS, FOGGING_LABELS, HEALTH_SYMPTOMS_LABELS, HIRING_TIMELINE_LABELS, PROPERTY_SIZE_LABELS, PROPERTY_TYPE_LABELS, SEVERITY_LABELS, START_TIME_LABELS, YES_NO_LABELS } from './constants/userReportConstants'
+import UserDownloadPdfModal from './userDownloadPdfModal'
 
 export default function UserReport({ estimate, disableLinks=false }: { estimate: Estimate, disableLinks: boolean }) {
     const { estimateResults, estimateId, data, contact } = estimate
@@ -28,7 +29,7 @@ export default function UserReport({ estimate, disableLinks=false }: { estimate:
 
 
     /* Request Service State */
-    const [isUpdatingServices, setIsUpdatingServices] = useState(false)
+    //const [isUpdatingServices, setIsUpdatingServices] = useState(false)
 
     /* Contact State */
     const [contactInfo, setContactInfo] = useState<ContactInfo>(contact)// Contact state 
@@ -51,7 +52,7 @@ export default function UserReport({ estimate, disableLinks=false }: { estimate:
         }
     }
 
-    async function handleUpdateServiceRequests() {
+    /*async function handleUpdateServiceRequests() {
         setIsUpdatingServices(true)
         try {
             const result = await updateServiceRequests(
@@ -72,7 +73,33 @@ export default function UserReport({ estimate, disableLinks=false }: { estimate:
             setIsUpdatingServices(false)
         }
     }
-    
+    */
+
+    async function handleServiceLinkClick(hrefEndpoint: string) {
+        try {
+            const result = await updateServiceRequests(
+                estimate.id,
+                hrefEndpoint === '' ? true : requestRealEstimates,
+                hrefEndpoint === '/diy' ? true : requestDiyBlueprint,
+                hrefEndpoint === '/remote' ? true : requestConsultant,
+            )
+            if (result.success) {
+                toast.success('Service request saved!')
+            } else {
+                toast.error('Failed to save service request. Please try again.')
+                return
+            }
+        } catch (err) {
+            console.error('Service link click error:', err)
+            toast.error('Failed to save service request. Please try again.')
+            return
+        }
+
+        // Only navigate if there is an endpoint — ad1 is save-only
+        if (hrefEndpoint) {
+            window.location.href = `/user/report${hrefEndpoint}`
+        }
+    }
     const BREAKDOWN_ROWS = [
         { label: 'Base Remediation cost', val: breakdown.baseCost            },
         { label: 'Severity Adjustment',   val: breakdown.severityAdjustment  },
@@ -82,12 +109,14 @@ export default function UserReport({ estimate, disableLinks=false }: { estimate:
     ]
 
     const AD_DETAIL_ROWS = [
-        {id:'ad1', hrefEndpoint: '', buttonName:'',setter: setRequestRealEstimates, title: 'Ready to receive Real Estimates From Local Remediators?', description:'Receive mold remediation estimates from up to three qualified remediation companies in your area. Estimates will be based on the answers you provided for the Remediation Calculator, emailed to you directly from vetted remediators. Allow up to 5 business days for estimates to be received. Remediators may contact you for more info.', ctaLabel:'Yes, please send me up to three cost estimates from qualified remediators in my area using the Remediation Calculator info I\'ve submitted.', bg: 'bg-green-600', border: 'border-green-200', text: 'text-green-800', hover: 'hover:bg-green-100'},
+        {id:'ad1', hrefEndpoint: '', buttonName:'Request Estimates Now',setter: setRequestRealEstimates, title: 'Ready to receive Real Estimates From Local Remediators?', description:'Receive mold remediation estimates from up to three qualified remediation companies in your area. Estimates will be based on the answers you provided for the Remediation Calculator, emailed to you directly from vetted remediators. Allow up to 5 business days for estimates to be received. Remediators may contact you for more info.', ctaLabel:'Yes, please send me up to three cost estimates from qualified remediators in my area using the Remediation Calculator info I\'ve submitted.', bg: 'bg-green-600', border: 'border-green-200', text: 'text-green-800', hover: 'hover:bg-green-100'},
         {id:'ad2', hrefEndpoint: '/diy', buttonName:'Click Here to Learn More About DIY Remediation',setter: setRequestDiyBlueprint,title: 'Get a Do-It-Yourself Remediation Blueprint', description: 'If mold remediation costs are above your means, let one of our professional remediation consultants create a personalized, step-by-step, home mold removal guide to safely decontaminate your home yourself for a fraction of the cost of hiring a remediation company.', ctaLabel:'Yes, send me more info on your Do-It-Yourself Remediation Blueprint.', bg: 'bg-orange-600', border: 'border-orange-200', text: 'text-orange-800', hover: 'hover:bg-orange-100'},
         {id:'ad3', hrefEndpoint: '/remote', buttonName:'Click Here to Learn More About Remote Remediation Consultant',setter: setRequestConsultant,title: 'Get a Remote Remediation Consultant to Guide You Through the Process', description: 'Have questions or concerns regarding an expensive mold remediation service quote or scope-of-service outline you received from a remediation company? Want practical advice on a cost & time-effective plan of action and Scope of Work before hiring a remediation company? Get a second, unbiased opinion, action plan, and recommendations for your specific issue from a certified indoor environmental consultant before agreeing to unnecessary services and upsells.', ctaLabel:'Yes, send me more info on your Remote Remediation Consulting Service.' , bg: 'bg-blue-600', border: 'border-blue-200', text: 'text-blue-800', hover: 'hover:bg-blue-100'}
     ]
 
-   
+   const scrollToAdSection = () => {
+        document.getElementById('adDetailSection')?.scrollIntoView({ behavior: 'smooth' })
+    }
   return (
     <div className="space-y-10 max-w-2xl mx-auto flex flex-col  min-w-12xl">
     
@@ -137,6 +166,10 @@ export default function UserReport({ estimate, disableLinks=false }: { estimate:
         </div>
     </EstimateBreakdownSection>
     
+    {(estimate.blueprintPdf || estimate.consultationPdf)  && 
+        <UserDownloadPdfModal estimate={estimate}/>            
+    }
+
     <AdvertisementSection>
         <div className='flex flex-col gap-2'>
             {AD_ROWS.map(row => {
@@ -150,7 +183,7 @@ export default function UserReport({ estimate, disableLinks=false }: { estimate:
 
                 return disableLinks
                     ? <div key={row.targetId} className={className}>{inner}</div>
-                    : <Link key={row.targetId} className={className} href={`/user/report#${row.targetId}`}>{inner}</Link>
+                    : <div key={row.targetId} className={`${className} cursor-pointer`} onClick={scrollToAdSection}>{inner}</div>//<Link key={row.targetId} className={className} href={`/user/report#adDetailSection`}>{inner}</Link>//${row.targetId}
             })}
         </div>
     </AdvertisementSection>
@@ -315,13 +348,13 @@ export default function UserReport({ estimate, disableLinks=false }: { estimate:
     </ContactInfoSection>      
     
     <AdvertisementDetailSection>
-        <div className='bg-slate-200 p-4 rounded-4xl flex flex-col gap-4'>
+        <div id={"adDetailSection"} className='bg-slate-200 p-4 rounded-4xl flex flex-col gap-4'>
             <div className="flex items-center gap-2">
                 <Send className='text-theme1 w-6 h-6 shrink-0' />
                 <h3 className='font-bold'> Send More Details About the Below Services</h3>
             </div>
             
-            <p className='text-slate-400 font-light text-sm'>Place a check mark in each of the below service boxes that interest you. Be aware that once you submit request for more services, there is chance you may </p>
+            <p className='text-slate-400 font-light text-sm'>Place a check mark in each of the service boxes below that interest you, then click on the corresponding &lsquo;Get More Info NOW&lsquo; button to immediately receive more info. </p>
             <hr className="border-slate-300" />
             {AD_DETAIL_ROWS.map((row) => {
             const isActive =
@@ -352,11 +385,11 @@ export default function UserReport({ estimate, disableLinks=false }: { estimate:
                         <div className='flex flex-col mt-4 bg-white rounded-2xl p-4 items-center gap-2'>
                             {disableLinks
                                 ? <div className='bg-theme1 font-semibold text-white p-2 px-8 rounded-2xl opacity-60 cursor-not-allowed'>{row.buttonName}</div>
-                                : <Link className='bg-theme1 hover:bg-theme1Shade font-semibold text-white p-2 px-8 rounded-2xl' href={`/user/report${row.hrefEndpoint}`}>{row.buttonName}</Link>
+                                :   <button onClick={() => handleServiceLinkClick(row.hrefEndpoint)} className='bg-theme1 hover:bg-theme1Shade font-semibold text-white p-2 px-8 rounded-2xl transition-colors'>
+                                        {row.buttonName}
+                                    </button>//<Link className='bg-theme1 hover:bg-theme1Shade font-semibold text-white p-2 px-8 rounded-2xl' href={`/user/report${row.hrefEndpoint}`}>{row.buttonName}</Link>
                             }
-                            <p className='text-slate-500 text-sm text-center'>You have indicated interest in the above service, make sure to click the button
-                                <span className='font-bold'> Update Interest of Selected Services</span> to save your selections.
-                            </p>
+                            <p className='text-slate-500 text-sm text-center'>By clicking the button above, your request will be submitted. Please review our terms and policies below before proceeding. </p>
                         </div>
                     </>
                 }
@@ -365,20 +398,20 @@ export default function UserReport({ estimate, disableLinks=false }: { estimate:
             })}
 
             <hr className="border-slate-300" />
-
+            {/*
             <button
                 onClick={handleUpdateServiceRequests}
                 disabled={isUpdatingServices || disableLinks}
                 className="w-full py-3 rounded-2xl bg-theme1 hover:bg-theme1Shade text-white font-bold transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
                 {isUpdatingServices ? 'Sending…' : 'Update Interest of Selected Services'} 
-            </button>
+            </button>*/}
 
             <p className='text-gray-500 text-sm text-center'>
-                By submitting your contact information, you agree to our{' '}
-                <Link href={'/tos'} className='underline'>Terms of Service</Link>
+                By clicking any of the service request buttons above, you agree to our{' '}
+                <Link href={'/tos'} target='_blank'className='underline'>Terms of Service</Link>
                 {' '}and{' '}
-                <Link href={'/privacy'} className='underline'>Privacy Policy</Link>,
+                <Link href={'/privacy'} target='_blank' className='underline'>Privacy Policy</Link>,
                 and consent to being contacted by a professional using the information provided.
                 To opt out of communications at any time, please contact us at{' '}
                 <a href='mailto:support@iaq.network' className='underline'>support@iaq.network</a>.

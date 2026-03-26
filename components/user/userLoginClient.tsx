@@ -43,24 +43,20 @@ export default function UserLoginClient() {
     }
   }
 
-
-  async function performLogin(loginEmail?: string, loginReportId?: string){
-      const resolvedEmail = loginEmail ?? email      // use param if provided, else state
+  // Update performLogin signature and router.push:
+  async function performLogin(loginEmail?: string, loginReportId?: string, loginPage?: string) {
+      const resolvedEmail = loginEmail ?? email
       const resolvedReportId = loginReportId ?? accountId
-      // Sanitize inputs
       const sanitizedEmail = resolvedEmail.trim()
       const sanitizedReportId = resolvedReportId.trim()
 
       try {
           const result = await verifyUserAccess(sanitizedEmail, sanitizedReportId)
-          console.log("results: ", result)
-
-
           if (result.success && result.estimate) {
               sessionStorage.setItem('estimate', JSON.stringify(result.estimate))
-              
               window.dispatchEvent(new Event('estimate-session-change'))
-              router.push('/user/report')
+              // Navigate to page param if provided, otherwise default to report
+              router.push(loginPage ? `/user/report${loginPage}` : '/user/report')
           } else {
               setAutoLogging(false)
               toast.error(`Unable to Login. Invalid Email and/or Estimate ID`)
@@ -69,23 +65,23 @@ export default function UserLoginClient() {
           console.error('Login error:', err)
           setAutoLogging(false)
           toast.error('An error occurred. Please try again later.')
-      } 
+      }
   }
-
-  // Auto-submit if URL params are present
-  useEffect(() => {
+// Update useEffect to grab page param and pass it:
+useEffect(() => {
     const urlEmail = searchParams.get('email')
     const urlReportId = searchParams.get('estimateId')
+    const urlPage = searchParams.get('page') ?? undefined
 
     if (urlEmail && urlReportId && !hasAutoSubmitted.current) {
-      hasAutoSubmitted.current = true
-      setEmail(urlEmail)
-      setAccountId(urlReportId)
-      setAutoLogging(true)
-      performLogin(urlEmail, urlReportId)
+        hasAutoSubmitted.current = true
+        setEmail(urlEmail)
+        setAccountId(urlReportId)
+        setAutoLogging(true)
+        performLogin(urlEmail, urlReportId, urlPage)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams])
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [searchParams])
 
   
   // Full screen auto-login loading state

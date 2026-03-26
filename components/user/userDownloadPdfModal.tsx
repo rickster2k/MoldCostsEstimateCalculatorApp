@@ -55,7 +55,7 @@ export default function UserDownloadPdfModal({ estimate }: Props) {
     return (
         <>
             {/* ── Floating pill ─────────────────────────────────────────────── */}
-            <div className="absolute top-3.5 right-6 flex items-center gap-2 bg-white border border-slate-200 rounded-xl shadow-sm px-4 py-3">
+            <div className="mx-auto flex w-fit items-center gap-2 bg-white border border-slate-200 rounded-xl shadow-sm px-4 py-3">
                 <div className="flex items-center gap-1.5 mr-1">
                     <Download className="w-4 h-4 text-slate-400" />
                     <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">

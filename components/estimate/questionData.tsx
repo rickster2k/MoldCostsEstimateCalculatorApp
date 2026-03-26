@@ -326,7 +326,7 @@ export const QUESTIONS: QuestionConfig[] = [
   // ── Step 15: Fogging ───────────────────────────────────────────────────────
   {
     step: 15,
-    title: 'Interested in whole-home fogging?',
+    title: 'Interested in a post-remediation, whole home fogging?',
     subtitle: 'This disinfection process kills mold and airborne spores affecting the non-remediated areas of your home.',
     field: 'foggingInterest',
     options: [

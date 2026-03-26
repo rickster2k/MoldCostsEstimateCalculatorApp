@@ -3,6 +3,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --theme1: oklch(0.55 0.13 186);
+  --theme1Shade: oklch(0.6002 0.1038 184.7); 
+  --theme1L: oklch(90.798% 0.12794 187.842 / 0.459); 
+  --theme1Bright: oklch(99.032% 0.00952 197.656 / 0.929); 
+
 }
 
 @theme inline {
@@ -20,11 +25,7 @@
   :root {
     --background: oklch(.97622 0.00425 15.794); 
     --foreground: #000000;
-    --theme1: oklch(0.55 0.13 186);
-    --theme1Shade: oklch(0.6002 0.1038 184.7); 
-    --theme1L: oklch(90.798% 0.12794 187.842 / 0.459); 
-    --theme1Bright: oklch(99.032% 0.00952 197.656 / 0.929); 
-
+    
 
   }
 }

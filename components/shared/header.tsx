@@ -74,7 +74,7 @@ export default function Header({brandName = 'MoldCosts'}:HeaderProps){
             {/* Center attribution */}
             <div className="flex flex-col items-center order-1 md:order-2">
                 <p className="text-[9px] uppercase tracking-[0.25em] text-slate-400 font-bold ">
-                    Audit Courtesy of:
+                    ESTIMATE Courtesy of:
                 </p>
                 <a
                     href="https://www.iaq.network"
