@@ -25,6 +25,12 @@ export const metadata: Metadata = {
     description: 'Professional mold remediation cost estimator — instant & free.',
     type: 'website',
   },
+  icons: {
+    icon: "/favicon.ico",
+  },
+  other: {
+    "apple-mobile-web-app-title": "MoldCosts",  
+  },
 };
 
 export default function RootLayout({

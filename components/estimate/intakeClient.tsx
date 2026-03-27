@@ -8,6 +8,7 @@ import { saveEstimateAction } from "@/app/actions/firebaseActions/estimateAction
 import EstimateSentStep from "./estimateSentStep"
 import { sendEstimateEmail } from "@/app/actions/resendActions/sendEstimateEmail"
 import { verifyUserAccess } from "@/app/actions/firebaseActions/verifyUserAccess"
+import { updateSubmissionStats } from "@/app/actions/firebaseActions/globalStats/updateSubmissionStats"
 
 type IntakeClientProps = {
     contactInfo: ContactInfo
@@ -116,7 +117,20 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
                 requestConsultant:    false,
                 contact:             sanitizedContact,
             }
+            // Step 2a: Update global stats (non-blocking — failure doesn't stop the flow)
+            try {
+                const isServiceAlert =
+                    estimateSubmissionObj.requestRealEstimates ||
+                    estimateSubmissionObj.requestDiyBlueprint  ||
+                    estimateSubmissionObj.requestConsultant
 
+                await updateSubmissionStats({
+                    estimateAmount: estimateSubmissionObj.estimateAmount,
+                    isServiceAlert,
+                })
+            } catch (err) {
+                console.error('Stats update error:', err)
+            }
             // Step 3: Save to Firestore
             console.log("Saving estimate to Firestore...")
             const responseSave = await saveEstimateAction(estimateSubmissionObj)
