@@ -9,6 +9,7 @@ import EstimateSentStep from "./estimateSentStep"
 import { sendEstimateEmail } from "@/app/actions/resendActions/sendEstimateEmail"
 import { verifyUserAccess } from "@/app/actions/firebaseActions/verifyUserAccess"
 import { updateSubmissionStats } from "@/app/actions/firebaseActions/globalStats/updateSubmissionStats"
+import { changeFoggingTypeToYesNoUnsure } from "@/lib/utils/formattingUtils"
 
 type IntakeClientProps = {
     contactInfo: ContactInfo
@@ -112,6 +113,7 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
                 data:                sanitizedEstimateData,
                 estimateResults:     results,
                 testingStatus:       sanitizedEstimateData.needsTesting,
+                foggingStatus:       changeFoggingTypeToYesNoUnsure(sanitizedEstimateData.foggingInterest),
                 requestRealEstimates: false,
                 requestDiyBlueprint:  false,
                 requestConsultant:    false,
@@ -150,6 +152,7 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
                 data:                 estimateSubmissionObj.data,
                 estimateResults:      estimateSubmissionObj.estimateResults,
                 testingStatus:        estimateSubmissionObj.testingStatus,
+                foggingStatus:        estimateSubmissionObj.foggingStatus,
                 requestRealEstimates: estimateSubmissionObj.requestRealEstimates,
                 requestDiyBlueprint:  estimateSubmissionObj.requestDiyBlueprint,
                 requestConsultant:    estimateSubmissionObj.requestConsultant,

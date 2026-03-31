@@ -2,6 +2,7 @@
 
 import { ChevronRight, ArrowLeft, ShieldCheck, FileText, CheckCircle2, ShoppingCart, UploadCloud, FileCheck } from 'lucide-react'
 import Link from 'next/link'
+import DiyDisclaimerSection from '../diyDisclaimerSection'
 
 interface DiyClientProps {
   blueprintPrice?: number
@@ -161,6 +162,12 @@ export default function DiyClient({ blueprintPrice = 197, blueprintUrl = '' }: D
           </div>
         </section>
 
+        {/*DIY DISCLAIMER SECTION */}
+        <DiyDisclaimerSection />
+        
+
+
+
         {/* Order Section */}
         <section id="order-section" className="py-24 px-4 bg-white">
           <div className="max-w-3xl mx-auto bg-slate-900 rounded-[3.5rem] p-12 md:p-20 text-center text-white space-y-10 relative overflow-hidden">
@@ -200,6 +207,12 @@ export default function DiyClient({ blueprintPrice = 197, blueprintUrl = '' }: D
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4" /> Secure Payment
                 </div>
+                 <button
+                      onClick={() => document.getElementById('disclaimer-section')?.scrollIntoView({ behavior: 'smooth' })}
+                      className="text-slate-400 hover:text-orange-500 text-sm font-bold underline underline-offset-2 transition-colors"
+                  >
+                      See Disclaimer
+                  </button>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4" /> 100% Satisfaction
                 </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { Capitalize } from '@/lib/utils/formattingUtils'
-import { ChevronRight, Mail } from 'lucide-react'
+import {  Mail } from 'lucide-react'
 import Link from 'next/link'
 
 interface EstimateSentStepProps {
@@ -39,7 +39,7 @@ export default function EstimateSentStep({ firstName, email, estimateId }: Estim
         href='/user/report'
         className=" bg-theme1 hover:bg-theme1Shade text-white py-4 px-10 rounded-2xl transition-all shadow-lg shadow-teal-400/20 flex items-center gap-3"
       >
-        View Your Estimate <ChevronRight className="w-5 h-5" />
+        View Your Estimate Online Now   <span className="font-bold tracking-tighter">{'>>'}</span>
       </Link>
       
     </div>

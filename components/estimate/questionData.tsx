@@ -98,14 +98,14 @@ export const QUESTIONS: QuestionConfig[] = [
       <div className="space-y-3">
         <input
           type="text"
-          placeholder="Enter 5-digit Zip Code"
-          maxLength={5}
+          placeholder="Enter your Zip Code"
+          maxLength={12}
           value={data.zipCode}
           onChange={e => setData({ ...data, zipCode: e.target.value.replace(/\D/g, '') })}
           className="w-full px-5 py-4 rounded-2xl border-2 border-slate-100 focus:border-primary focus:outline-none text-lg font-semibold transition-all"
         />
-        {data.zipCode.length > 0 && data.zipCode.length < 5 && (
-          <p className="text-xs text-amber-600 font-medium">Please enter a valid 5-digit zip code.</p>
+        {( (data.zipCode.length >0 && data.zipCode.length <= 2) || data.zipCode.length >= 12) && (
+          <p className="text-xs text-amber-600 font-medium">Please enter a valid zip code.</p>
         )}
       </div>
     ),

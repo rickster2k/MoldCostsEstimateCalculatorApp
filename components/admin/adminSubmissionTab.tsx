@@ -3,7 +3,7 @@
 import { Estimate, GlobalStats } from "@/lib/types"
 import { useState } from "react"
 import { toast } from "sonner"
-import {Search,Download,Calendar,X,CheckCircle2,ExternalLink,ChevronDown,DollarSign,ClipboardList,Bell,FileText,ShieldCheck,Filter} from "lucide-react"
+import {Search,Download,Calendar,X,ExternalLink,ChevronDown,DollarSign,ClipboardList,Bell,Filter} from "lucide-react"
 
 
 /*Filter actions Pagination */
@@ -418,6 +418,7 @@ export default function AdminSubmissionTab({
                                 <th className="text-left px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">Estimate ID</th>
                                 <th className="text-left px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">Estimate $</th>
                                 <th className="text-left px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">Testing</th>
+                                <th className="text-left px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">Fogging</th>
                                 <th className="text-center px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">Real Est.</th>
                                 <th className="text-center px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">Blueprint</th>
                                 <th className="text-center px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">Consult</th>
@@ -494,8 +495,13 @@ export default function AdminSubmissionTab({
                                         </td>
 
                                         {/* Testing status */}
-                                        <td className="px-4 py-3 text-slate-500 text-xs Capitalize">
+                                        <td className="px-4 py-3 text-slate-500 text-xs capitalize">
                                             {est.testingStatus}
+                                        </td>
+
+                                        {/* Fogging status */}
+                                        <td className="px-4 py-3 text-slate-500 text-xs capitalize">
+                                            {est.foggingStatus}
                                         </td>
 
                                         {/* Real Estimates */}

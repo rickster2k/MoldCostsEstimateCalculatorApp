@@ -21,6 +21,7 @@ export async function saveEstimateAction(data: EstimateNoId) {
             data: data.data,
             estimateResults: data.estimateResults,
             testingStatus: data.testingStatus,
+            foggingStatus: data.foggingStatus,
             requestRealEstimates: data.requestRealEstimates,
             requestDiyBlueprint: data.requestDiyBlueprint,
             requestConsultant: data.requestConsultant,

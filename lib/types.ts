@@ -204,7 +204,8 @@ export interface Estimate {
     estimateAmount: number; // Computed average estimate in USD at time of submission 
     estimateResults: CalculationResult; // Results from gemini
     data: EstimateData; // Complete snapshot of all 19 question answers at time of submission 
-    testingStatus: YesNoUnsure;
+    testingStatus: YesNoUnsure; // If they want a mold test question 14 
+    foggingStatus: YesNoUnsure; // If they want a home-fogging question 15
 
     //  Service requests 
     requestRealEstimates: boolean;// User opted in to being matched with local contractors - handled on your end 
@@ -276,7 +277,8 @@ export interface EstimateNoId {
     estimateAmount: number; // Computed average estimate in USD at time of submission 
     estimateResults: CalculationResult; // Results from gemini
     data: EstimateData; // Complete snapshot of all 19 question answers at time of submission 
-    testingStatus: YesNoUnsure;
+    testingStatus: YesNoUnsure; // If they want a mold test question 14 
+    foggingStatus: YesNoUnsure; // If they want a home-fogging question 15
 
     //  Service requests 
     requestRealEstimates: boolean;// User opted in to being matched with local contractors

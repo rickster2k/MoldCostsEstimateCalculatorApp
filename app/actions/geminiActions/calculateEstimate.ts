@@ -56,7 +56,8 @@ export async function calculateEstimate(data: EstimateData): Promise<{
          - Severity and accessibility of the mold growth
          - Whether HVAC, furniture, or structural elements are involved
          - Regional pricing adjustments based on zip code prefix
-         - Whether professional testing or whole-home fogging was requested
+         - Whether professional testing was requested (needsTesting === 'yes')
+         - Whole-home fogging cost should ONLY be included if foggingInterest === 'yes'. If foggingInterest is 'interested', 'not-sure', or 'no', foggingCost must be 0.
       3. Break the estimate into its component cost drivers.
       4. Return a low estimate (roughly 20% below average) and a high estimate (roughly 20% above average).
 
@@ -115,7 +116,7 @@ export async function calculateEstimate(data: EstimateData): Promise<{
                 },
                 foggingCost: {
                   type: Type.NUMBER,
-                  description: 'Whole-home fogging cost, 0 if not requested',
+                  description: 'Whole-home fogging cost in USD. Must be 0 unless foggingInterest is exactly "yes". If foggingInterest is "interested", "not-sure", or "no", this must be 0.',
                 },
               },
               required: ['baseCost', 'severityAdjustment', 'complexityAdjustment', 'additionalServices', 'foggingCost'],

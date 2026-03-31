@@ -104,7 +104,7 @@ export default function UserReport({ estimate, disableLinks=false }: { estimate:
         { label: 'Base Remediation cost', val: breakdown.baseCost            },
         { label: 'Severity Adjustment',   val: breakdown.severityAdjustment  },
         { label: 'Access Complexity',     val: breakdown.complexityAdjustment },
-        { label: 'Additional Services',   val: breakdown.additionalServices   },
+        { label: 'Additional Services (testing, contents removal, etc.)',   val: breakdown.additionalServices   },
         ...(breakdown.foggingCost ? [{ label: 'Whole-home fogging', val: breakdown.foggingCost }] : []),
     ]
 

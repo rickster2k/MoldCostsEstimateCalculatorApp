@@ -2,6 +2,7 @@
 
 import { ChevronRight, ArrowLeft, ShieldCheck, CheckCircle2, UserCheck, ShoppingCart, UploadCloud, FileCheck } from 'lucide-react'
 import Link from 'next/link'
+import ConsultantDisclaimerSection from '../consultantDisclaimerSection'
 
 interface RemoteClientProps {
   consultationPrice?: number
@@ -153,6 +154,9 @@ export default function RemoteClient({ consultationPrice = 297, consultationUrl 
           </div>
         </section>
 
+
+        <ConsultantDisclaimerSection/>
+
         {/* Order Section */}
         <section id="consult-order-section" className="py-24 px-4 bg-white">
           <div className="max-w-3xl mx-auto bg-slate-900 rounded-[3.5rem] p-12 md:p-20 text-center text-white space-y-10 relative overflow-hidden">
@@ -191,6 +195,12 @@ export default function RemoteClient({ consultationPrice = 297, consultationUrl 
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4" /> Certified Experts
                 </div>
+                <button
+                      onClick={() => document.getElementById('disclaimer-section')?.scrollIntoView({ behavior: 'smooth' })}
+                      className="text-slate-400 hover:text-blue-500 text-sm font-bold underline underline-offset-2 transition-colors"
+                  >
+                      See Disclaimer
+                  </button>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4" /> Unbiased Advice
                 </div>

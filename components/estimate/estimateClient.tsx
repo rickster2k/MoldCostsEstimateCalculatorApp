@@ -62,7 +62,7 @@ export default function EstimatorClient() {
       const q = QUESTIONS.find(q => q.step === currentStep)!
 
       const nextDisabled = (() => {
-        if (currentStep === 3) return data.zipCode.length !== 5
+        if (currentStep === 3) return ((data.zipCode.length >0 && data.zipCode.length <= 2) || data.zipCode.length >= 12)
         if (currentStep === 4) return data.affectedLocations.length === 0
         return false
       })()
