@@ -84,28 +84,21 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
                 })) as [PreviousEstimate, PreviousEstimate, PreviousEstimate],
             }
             
-            console.log("Current contactInfo that will be saved: ", sanitizedContact)
-            console.log("Estimate data being sent: ", sanitizedEstimateData)
-            // Step 1: Get calculation results
-            // Use local variable (not state) for all downstream steps —
-            // setResults is async and state won't be updated until next render.
-            //let results: CalculationResult
-
-            //if (USE_FAKE_RESULTS) {
-            //    console.warn("⚠️ Using fake results — swap USE_FAKE_RESULTS to false once API key is set")
-            //    results = FAKE_RESULTS
-            //} else {
-                console.log("Calling Gemini calculateEstimate...")
-                const response = await calculateEstimate(sanitizedEstimateData)
-                if (!response.success || !response.data) {
-                    console.error("Gemini error:", response.error)
-                    toast.error("There was a problem calculating your estimate. Please try again.")
-                    return
-                }
-                console.log("Gemini response:", response.data)
-                const results = response.data
-                toast.success("Your results have been calculated!")
-            //}
+            //console.log("Current contactInfo that will be saved: ", sanitizedContact)
+            //console.log("Estimate data being sent: ", sanitizedEstimateData)
+            
+            // Step 1: Get calculation results      
+            //console.log("Calling Gemini calculateEstimate...")
+            const response = await calculateEstimate(sanitizedEstimateData)
+            if (!response.success || !response.data) {
+                console.error("Gemini error:", response.error)
+                toast.error("There was a problem calculating your estimate. Please try again.")
+                return
+            }
+            //console.log("Gemini response:", response.data)
+            const results = response.data
+            toast.success("Your results have been calculated!")
+          
 
             // Step 2: Build submission object
             const estimateSubmissionObj: EstimateNoId = {
@@ -134,7 +127,7 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
                 console.error('Stats update error:', err)
             }
             // Step 3: Save to Firestore
-            console.log("Saving estimate to Firestore...")
+            //console.log("Saving estimate to Firestore...")
             const responseSave = await saveEstimateAction(estimateSubmissionObj)
             if (!responseSave.success) {
                 throw new Error(responseSave.error || 'Failed to save submission')
@@ -171,8 +164,8 @@ export default function IntakeClient({ contactInfo, setContact, zipCode, estimat
                     console.error("Email send failed:", emailResult.error)
                     toast.error("Your estimate is saved but we could not send the confirmation email. You can still view it from your report page.")
                 }
-            } catch (e) {
-                console.error("Email error:", e)
+            } catch  {
+                //console.error("Email error:", e)
                 toast.error("Your estimate is saved but we could not send the confirmation email.")
             }
 

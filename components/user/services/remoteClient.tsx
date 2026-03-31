@@ -72,7 +72,7 @@ export default function RemoteClient({ consultationPrice = 297, consultationUrl 
               </h2>
               <div className="space-y-6 text-lg text-slate-600 leading-relaxed">
                 <p>
-                  Remediation companies often use fear to push unnecessary services and inflated quotes. If you're
+                  Remediation companies often use fear to push unnecessary services and inflated quotes. If you&lsquo;re
                   looking at a bill for <span className="font-bold text-slate-900">$10,000+</span>, you need to know
                   if it&lsquo;s actually required.
                 </p>

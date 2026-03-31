@@ -21,7 +21,7 @@ import UserDownloadPdfModal from './userDownloadPdfModal'
 export default function UserReport({ estimate, disableLinks=false }: { estimate: Estimate, disableLinks: boolean }) {
     const { estimateResults, estimateId, data, contact } = estimate
     const { lowEstimate, highEstimate, averageEstimate, breakdown } = estimateResults
-    console.log("contact info: ", contact)
+    //console.log("contact info: ", contact)
     /*State controller for User */
     const [requestRealEstimates, setRequestRealEstimates] = useState<boolean>(estimate.requestRealEstimates)// User opted in to being matched with local contractors
     const [requestDiyBlueprint, setRequestDiyBlueprint] = useState<boolean>(estimate.requestDiyBlueprint)// User requested the DIY Remediation Blueprint

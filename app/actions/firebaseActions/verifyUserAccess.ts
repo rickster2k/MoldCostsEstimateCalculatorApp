@@ -5,15 +5,15 @@ import { cookies } from 'next/headers'
 import { SignJWT } from 'jose'
 import { Estimate } from '@/lib/types'
 export async function verifyUserAccess(email: string, reportId: string) {
-    console.log("Hiiiii")
+
     try {
         const normalizedEmail = email.trim()
         const normalizedReportId = reportId.trim().toUpperCase()
 
 
-        console.log("Checking user access with email:", normalizedEmail)
-        console.log("Checking user access with normalizedReportId:", normalizedReportId)
-        console.log("Checking Firestore for matching submission...")
+        //console.log("Checking user access with email:", normalizedEmail)
+        //console.log("Checking user access with normalizedReportId:", normalizedReportId)
+        //console.log("Checking Firestore for matching submission...")
 
         const adminDb = getAdminDb()
         

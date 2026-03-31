@@ -7,7 +7,7 @@ import { getAdminDb } from "@/lib/services/firebaseAdmin";
 export async function saveEstimateAction(data: EstimateNoId) {
     try{
         //Call ai api here for caluculation given what data ? 
-        console.log("data being passed is ", data);
+        //console.log("data being passed is ", data);
 
         const id = crypto.randomUUID()
         const estimateId  = await generateEstimateId();
@@ -46,8 +46,8 @@ export async function saveEstimateAction(data: EstimateNoId) {
             timestamp: timestamp, 
         }
     }
-    catch(e){
-        console.error('Error in saveSubmission action:', e)
+    catch{
+        //console.error('Error in saveSubmission action:', e)
     
         return {
             success: false,
@@ -66,12 +66,12 @@ export async function saveEstimateToFirestore(estimate: Estimate) {
       .doc(estimate.id)
       .set(estimate)
     
-    console.log('Estimate saved')
+    //console.log('Estimate saved')
     return {
         success: true
     }
-  } catch (error) {
-    console.error('Error saving estimate:', error)
+  } catch {
+    //console.error('Error saving estimate:', error)
     return {
         success: false
     }
